@@ -76,11 +76,17 @@ if st.button("Fetch and Update Ratings"):
     for tour in TOURS:
         st.subheader(f"{tour} Matches")
         matches = fetch_results(tour, date.strftime("%Y-%m-%d"))
-        ratings = process_matches(ratings, matches)
-        st.success(f"Processed {len(matches)} matches.")
+
+        if matches:
+            st.success(f"✅ {len(matches)} matches fetched for {tour}")
+            st.write(matches[:5])  # Display first 5 raw entries
+            ratings = process_matches(ratings, matches)
+        else:
+            st.warning(f"⚠️ No matches returned for {tour} on {date.strftime('%Y-%m-%d')}")
 
     save_ratings(ratings)
-    st.success("Ratings updated and saved!")
+    st.success("✅ Ratings updated and saved!")
+
 
 if st.checkbox("Show Current Ratings"):
     ratings = load_ratings()
