@@ -29,14 +29,15 @@ def save_ratings(ratings):
         json.dump(ratings, f, indent=2)
 
 def fetch_results(tour, date):
-    base_url = f"https://tennis-api-atp-wta-itf.p.rapidapi.com/tennis/v2/{tour.lower()}/fixtures/{date}"
-    response = requests.get(base_url, headers=HEADERS)
-    
+    url = f"https://tennis-api-atp-wta-itf.p.rapidapi.com/tennis/v2/{tour.lower()}/results/{date}"
+    response = requests.get(url, headers=HEADERS)
+
     if response.status_code == 200:
-        return response.json().get("results", []) or response.json().get("response", [])  # MatchStat uses 'response'
+        return response.json().get("response", [])  # this API uses 'response' key
     else:
         st.warning(f"Failed to fetch {tour} data: {response.status_code}")
         return []
+
 
 
 
