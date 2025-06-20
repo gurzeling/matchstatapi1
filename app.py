@@ -29,13 +29,15 @@ def save_ratings(ratings):
         json.dump(ratings, f, indent=2)
 
 def fetch_results(tour, date):
-    url = BASE_URL.format(tour)
-    response = requests.get(url, headers=HEADERS, params={"date": date})
+    url = "https://tennis-api-atp-wta-itf.p.rapidapi.com/results"
+    querystring = {"tour": tour, "date": date}
+    response = requests.get(url, headers=HEADERS, params=querystring)
     if response.status_code == 200:
         return response.json().get("results", [])
     else:
         st.warning(f"Failed to fetch {tour} data: {response.status_code}")
         return []
+
 
 def expected_score(r1, r2):
     return 1 / (1 + 10 ** ((r2 - r1) / 400))
